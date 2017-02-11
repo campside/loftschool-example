@@ -5,6 +5,13 @@
  Напишите аналог встроенного метода forEach для работы с массивами
  */
 function forEach(array, fn) {
+    var res = [];
+
+    for (var i = 0; i < array.length; i++) {
+        res.push(fn(array[i], i, array));
+    }
+
+    return res;
 }
 
 /*
@@ -12,6 +19,13 @@ function forEach(array, fn) {
  Напишите аналог встроенного метода map для работы с массивами
  */
 function map(array, fn) {
+    var res = [];
+
+    for (var i = 0; i < array.length; i++) {
+        res.push(fn(array[i], i, array));
+    }
+
+    return res;
 }
 
 /*
@@ -19,6 +33,22 @@ function map(array, fn) {
  Напишите аналог встроенного метода reduce для работы с массивами
  */
 function reduce(array, fn, initial) {
+    var iteration = 0;
+    var prev;
+
+    for (var i = 0; i < array.length; i++) {
+        if (iteration == 0) {
+            if (initial == undefined) {
+                prev = fn(array[0], array[i + 1], i, array);
+            } else {
+                prev = fn(initial, array[i + 1], i, array);
+            }
+        } else {
+            prev = fn(prev, array[i + 1], i, array);
+        }
+
+        iteration = iteration + 1;
+    }
 }
 
 /*
@@ -27,6 +57,8 @@ function reduce(array, fn, initial) {
  Функция должна удалить указанное свойство из указанного объекта
  */
 function deleteProperty(obj, prop) {
+    delete obj[prop];
+
 }
 
 /*
@@ -35,6 +67,7 @@ function deleteProperty(obj, prop) {
  Функция должна проверить существует ли укзаанное свойство в указанном объекте
  */
 function hasProperty(obj, prop) {
+    return ((obj.hasOwnProperty(prop)) ? true : false);
 }
 
 /*
@@ -42,6 +75,7 @@ function hasProperty(obj, prop) {
  Функция должна получить все перечисляемые свойства объекта и вернуть их в виде массива
  */
 function getEnumProps(obj) {
+    return Object.keys(obj);
 }
 
 /*
@@ -49,13 +83,50 @@ function getEnumProps(obj) {
  Функция должна перебрать все свойства объекта, преобразовать их имена в верхний регистра и вернуть в виде массива
  */
 function upperProps(obj) {
+    var props = Object.keys(obj),
+        res = [];
+
+    for (var i = 0; i < props.length; i++) {
+        res.push(props[i].toUpperCase());
+    }
+
+    return res;
 }
 
 /*
  Задача 8 *:
  Напишите аналог встроенного метода slice для работы с массивами
  */
-function slice(array, from, to) {
+function slice(array, from = 0, to = array.length) {
+    var res = [];
+    var len = array.length - 1; // 7
+
+    // по идее этот ифак можно заменить на функцию и реиспользовать ниже.
+    if (from < 0) {
+        if (from < (-len)) {
+            from = 0;
+        } else if (from >= -len) {
+            from = len + from + 1;
+        }
+    } else if (from > len) {
+        from = len + 1;
+    }
+
+    if (to < 0) {
+        if (to < (-len)) {
+            to = 0;
+        } else if (to >= -len) {
+            to = len + to + 1;
+        }
+    } else if (to > len) {
+        to = len + 1;
+    }
+
+    for (var i = from; i < to; i++) {
+        res.push(array[i]);
+    }
+
+    return res;
 }
 
 /*
@@ -64,6 +135,12 @@ function slice(array, from, to) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+
+    var proxy = function(obj) {
+        return obj;
+    };
+
+    return obj + proxy;
 }
 
 export {
