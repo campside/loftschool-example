@@ -38,17 +38,19 @@ function reduce(array, fn, initial) {
 
     for (var i = 0; i < array.length; i++) {
         if (iteration == 0) {
+            iteration++;
             if (initial == undefined) {
-                prev = fn(array[0], array[i + 1], i, array);
+                i++;
+                prev = fn(array[0], array[i], i, array);
             } else {
-                prev = fn(initial, array[i + 1], i, array);
+                prev = fn(initial, array[i], i, array);
             }
         } else {
-            prev = fn(prev, array[i + 1], i, array);
+            prev = fn(prev, array[i], i, array);
         }
-
-        iteration = iteration + 1;
     }
+
+    return prev;
 }
 
 /*
@@ -136,11 +138,7 @@ function slice(array, from = 0, to = array.length) {
  */
 function createProxy(obj) {
 
-    var proxy = function(obj) {
-        return obj;
-    };
-
-    return obj + proxy;
+    return obj;
 }
 
 export {
