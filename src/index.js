@@ -69,7 +69,7 @@ function deleteProperty(obj, prop) {
  Функция должна проверить существует ли укзаанное свойство в указанном объекте
  */
 function hasProperty(obj, prop) {
-    return ((obj.hasOwnProperty(prop)) ? true : false);
+    return obj.hasOwnProperty(prop);
 }
 
 /*
@@ -139,11 +139,10 @@ function slice(array, from = 0, to = array.length) {
 function createProxy(obj) {
 
     var handler = {
-        get: function (obj, name) {
-            return obj[name] ** 2;
+        set: function (obj, prop, val) {
+            return obj[prop] = val ** 2;
         }
     };
-
 
     return new Proxy(obj, handler);
 }
