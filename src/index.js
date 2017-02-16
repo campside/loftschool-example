@@ -53,6 +53,16 @@ function prepend(what, where) {
  * т.к. следующим соседом этих элементов является элемент с тегом P
  */
 function findAllPSiblings(where) {
+    var nodes = where.children;
+    var res = [];
+
+    for (var i = 0; i < nodes.length - 1; i++) {
+        if (nodes[i].nextSibling.tagName === 'P') {
+            res.push(nodes[i]);
+        }
+    }
+
+    return res;
 }
 
 /**
