@@ -87,6 +87,15 @@ function findError(where) {
  * должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
+    if (where.childNodes.length >= 1) {
+        var nodes = where.childNodes;
+
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].nodeType === 3) {
+                nodes[i].parentNode.removeChild(nodes[i]);
+            }
+        }
+    }
 }
 
 /**
@@ -100,6 +109,20 @@ function deleteTextNodes(where) {
  * должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
 function deleteTextNodesRecursive(where) {
+    if (where.childNodes.length >= 1) {
+
+        var nodes = where.childNodes;
+
+        for (var i = 0; i < nodes.length; i++) {
+
+            if (nodes[i].childNodes.length >= 1) {
+                deleteTextNodesRecursive(nodes[i]);
+            } else {
+                nodes[i].parentNode.removeChild(nodes[i]);
+                i--;
+            }
+        }
+    }
 }
 
 /**
