@@ -25,9 +25,29 @@ let homeworkContainer = document.querySelector('#homework-container');
  * @return {Element}
  */
 function createDiv() {
+    // Позаимствовал этот хэлпер для генерации рандомного цвета
+    function RandomColor() {
+        var letters = '0123456789ABCDEF',
+            color = '#';
+
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+
+        return color;
+    }
+    var size = Math.floor(Math.random() * 100 + 50);
+    // Учитываем размер окна
+    var posx = (Math.random() * (window.innerWidth - size)).toFixed();
+    var posy = (Math.random() * (window.innerHeight - size)).toFixed();
     var div = document.createElement('div');
 
     div.setAttribute('class', 'draggable-div');
+    div.style.height = size + 'px';
+    div.style.width = size + 'px';
+    div.style.backgroundColor = RandomColor().toString();
+    div.style.left = posx + 'px';
+    div.style.top = posy + 'px';
 
     return div;
 }
@@ -38,6 +58,32 @@ function createDiv() {
  * @param {Element} target
  */
 function addListeners(target) {
+
+    var dragStartX,
+        dragStartY;
+    var objInitLeft,
+        objInitTop;
+    var inDrag = false;
+
+    target.addEventListener('mousedown', function(e) {
+        inDrag = true;
+        objInitLeft = target.offsetLeft;
+        objInitTop = target.offsetTop;
+        dragStartX = e.pageX;
+        dragStartY = e.pageY;
+    });
+
+    target.addEventListener('mousemove', function(e) {
+        if (!inDrag) {
+            return;
+        }
+        target.style.left = (objInitLeft + e.pageX - dragStartX) + 'px';
+        target.style.top = (objInitTop + e.pageY - dragStartY) + 'px';
+    });
+
+    target.addEventListener('mouseup', function() {
+        inDrag = false;
+    });
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
@@ -54,6 +100,4 @@ addDivButton.addEventListener('click', function() {
     // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
 });
 
-export {
-    createDiv
-};
+export {createDiv};
