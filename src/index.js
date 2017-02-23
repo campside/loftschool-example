@@ -7,6 +7,13 @@
  * @return {Promise}
  */
 function delayPromise(seconds) {
+
+    return new Promise(function(resolve, reject) {
+        setTimeout(function () {
+            resolve();
+        }, seconds * 1000);
+    });
+
 }
 
 /**
@@ -16,8 +23,32 @@ function delayPromise(seconds) {
  *
  * @return {Promise<Array<{name: String}>>}
  */
+
 function loadAndSortTowns() {
-    let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
+
+    return new Promise(function(resolve, reject) {
+        let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
+        var request = new XMLHttpRequest();
+
+        request.open('GET', url);
+        request.send()
+        request.onload = function() {
+            var cities = JSON.parse(request.response);
+
+            cities.sort(function(a, b) {
+                if (a.name < b.name) {
+                    return -1;
+                }
+                if (a.name > b.name) {
+                    return 1;
+                }
+
+                return 0;
+            });
+
+            resolve(cities);
+        };
+    });
 }
 
 export {
