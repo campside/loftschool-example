@@ -36,6 +36,8 @@ let homeworkContainer = document.querySelector('#homework-container');
  * @return {Promise<Array<{name: string}>>}
  */
 function loadTowns() {
+    loadingBlock.innerText = 'Вводите что-нибудь';
+
     return require('./index').loadAndSortTowns();
 }
 
@@ -53,6 +55,11 @@ function loadTowns() {
  * @return {boolean}
  */
 function isMatching(full, chunk) {
+    if (chunk === '') {
+        return false;
+    }
+
+    return full.toLowerCase().includes(chunk.toLowerCase());
 }
 
 let loadingBlock = homeworkContainer.querySelector('#loading-block');
@@ -62,6 +69,26 @@ let filterResult = homeworkContainer.querySelector('#filter-result');
 
 filterInput.addEventListener('keyup', function() {
     let value = this.value.trim();
+
+    if (filterResult.children.length != 0) {
+        while (filterResult.firstChild) {
+            filterResult.removeChild(filterResult.firstChild);
+        }
+    }
+
+    loadTowns().then((towns) => {
+        towns.forEach(function(e) {
+            if (isMatching(e.name, value)) {
+                var placeForCity = document.createElement('span');
+
+                placeForCity.innerText = e.name + '\n';
+
+                filterResult.appendChild(placeForCity);
+
+                loadingBlock.innerText = 'Done!';
+            }
+        })
+    })
 });
 
 export {
