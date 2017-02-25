@@ -53,6 +53,11 @@ let listTable = homeworkContainer.querySelector('#list-table tbody');
  * @return {boolean}
  */
 function isMatching(full, chunk) {
+    return chunk === '' ? false : full.toLowerCase().includes(chunk.toLowerCase());
+}
+
+function deleteCookie(name) {
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
 /**
@@ -62,11 +67,35 @@ function isMatching(full, chunk) {
  * @param value - значение cookie
  */
 function createCookieTr(name, value) {
+    return document.cookie = name + '=' + value;
 }
 
 filterNameInput.addEventListener('keyup', function() {
+
 });
 
 addButton.addEventListener('click', () => {
-});
+    createCookieTr(addNameInput.value, addValueInput.value);
 
+    let allCookies = document.cookie.split('; ');
+
+    while (listTable.firstChild) {
+        listTable.removeChild(listTable.firstChild)
+    }
+
+    allCookies.forEach(function(el) {
+        let newRow = document.createElement('TR');
+        let cookie = el.split('=');
+        let name = document.createElement('TD');
+        let value = document.createElement('TD');
+        let delButton = document.createElement('TD');
+
+        name.innerText = cookie[0];
+        value.innerText = cookie[1];
+        delButton.innerHTML = '<button id="del" name="' + cookie[0] + '">Удалить</button>';
+        listTable.appendChild(newRow);
+        newRow.appendChild(name);
+        newRow.appendChild(value);
+        newRow.appendChild(delButton);
+    })
+});
