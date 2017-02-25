@@ -71,31 +71,48 @@ function createCookieTr(name, value) {
 }
 
 filterNameInput.addEventListener('keyup', function() {
+    // while (listTable.firstChild) {
+    //     listTable.removeChild(listTable.firstChild)
+    // }
 
 });
 
-addButton.addEventListener('click', () => {
-    createCookieTr(addNameInput.value, addValueInput.value);
-
-    let allCookies = document.cookie.split('; ');
-
+function update(cookie) {
     while (listTable.firstChild) {
         listTable.removeChild(listTable.firstChild)
     }
 
-    allCookies.forEach(function(el) {
-        let newRow = document.createElement('TR');
-        let cookie = el.split('=');
-        let name = document.createElement('TD');
-        let value = document.createElement('TD');
-        let delButton = document.createElement('TD');
+    if (cookie.length == 1 && cookie[0] == '') {
 
-        name.innerText = cookie[0];
-        value.innerText = cookie[1];
-        delButton.innerHTML = '<button id="del" name="' + cookie[0] + '">Удалить</button>';
-        listTable.appendChild(newRow);
-        newRow.appendChild(name);
-        newRow.appendChild(value);
-        newRow.appendChild(delButton);
-    })
+        return;
+    } else {
+        cookie.forEach(function(el) {
+            let newRow = document.createElement('TR');
+            let cookie = el.split('=');
+            let name = document.createElement('TD');
+            let value = document.createElement('TD');
+            let delButton = document.createElement('TD');
+
+            name.innerText = cookie[0];
+            value.innerText = cookie[1];
+            delButton.innerHTML = '<button id="del" name="' + cookie[0] + '">Удалить</button>';
+            listTable.appendChild(newRow);
+            newRow.appendChild(name);
+            newRow.appendChild(value);
+            newRow.appendChild(delButton);
+
+            delButton.addEventListener('click', function del(e) {
+                deleteCookie(e.target.name);
+                update(document.cookie.split('; '));
+            })
+        })
+    }
+}
+
+addButton.addEventListener('click', () => {
+
+    createCookieTr(addNameInput.value, addValueInput.value);
+
+    update(document.cookie.split('; '));
+
 });
