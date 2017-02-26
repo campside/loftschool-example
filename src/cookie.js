@@ -53,7 +53,11 @@ let listTable = homeworkContainer.querySelector('#list-table tbody');
  * @return {boolean}
  */
 function isMatching(full, chunk) {
-    return chunk === '' ? false : full.toLowerCase().includes(chunk.toLowerCase());
+    if (chunk === '') {
+        return true;
+    }
+
+    return full.toLowerCase().trim().includes(chunk.toLowerCase().trim());
 }
 
 function deleteCookie(name) {
@@ -63,7 +67,9 @@ function deleteCookie(name) {
 function createCookie(name, value) {
     document.cookie = name + '=' + value;
 }
-
+/**
+ * Парсим кукисы в объект :)
+ */
 function getCookies() {
     return document.cookie
         .split('; ')
@@ -80,12 +86,15 @@ function getCookies() {
  * Обновляет список кукисов
  */
 function update(cookies) {
+
     while (listTable.firstChild) {
         listTable.removeChild(listTable.firstChild);
     }
 
     for (var prop in cookies) {
-        listTable.appendChild(createCookieTr(prop, cookies[prop]));
+        if (isMatching(cookies[prop], filterNameInput.value) || isMatching(prop, filterNameInput.value)) {
+            listTable.appendChild(createCookieTr(prop, cookies[prop]));
+        }
     }
 }
 
@@ -118,22 +127,11 @@ function createCookieTr(name, value) {
     return newRow;
 }
 
-filterNameInput.addEventListener('keyup', function() {
-    // while (listTable.firstChild) {
-    //     listTable.removeChild(listTable.firstChild)
-    // }
-
+filterNameInput.addEventListener('keyup', () => {
+    update(getCookies());
 });
 
 addButton.addEventListener('click', () => {
-    let cookies = getCookies();
-
-    if (!(cookies.hasOwnProperty(addNameInput.value))) {
-        createCookie(addNameInput.value, addValueInput.value);
-        listTable.appendChild(createCookieTr(addNameInput.value, addValueInput.value));
-    } else {
-        createCookie(addNameInput.value, addValueInput.value);
-        update(getCookies());
-    }
-
+    createCookie(addNameInput.value, addValueInput.value);
+    update(getCookies());
 });
