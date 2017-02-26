@@ -57,7 +57,36 @@ function isMatching(full, chunk) {
 }
 
 function deleteCookie(name) {
-    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    return document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+function createCookie(name, value) {
+    document.cookie = name + '=' + value;
+}
+
+function getCookies() {
+    return document.cookie
+        .split('; ')
+        .filter(Boolean)
+        .map(cookie => cookie.match(/^([^=]+)=(.+)/))
+        .reduce((obj, [, name, value]) => {
+            obj[name] = value;
+
+            return obj;
+        }, {});
+}
+
+/**
+ * Обновляет список кукисов
+ */
+function update(cookies) {
+    while (listTable.firstChild) {
+        listTable.removeChild(listTable.firstChild);
+    }
+
+    for (var prop in cookies) {
+        listTable.appendChild(createCookieTr(prop, cookies[prop]));
+    }
 }
 
 /**
@@ -67,7 +96,26 @@ function deleteCookie(name) {
  * @param value - значение cookie
  */
 function createCookieTr(name, value) {
-    return document.cookie = name + '=' + value;
+
+    let newRow = document.createElement('TR');
+    let nameTd = document.createElement('TD');
+    let valueTd = document.createElement('TD');
+    let delButton = document.createElement('TD');
+
+    delButton.innerHTML = '<button name="' + name + '">Удалить</button>';
+    nameTd.innerText = name;
+    valueTd.innerText = value;
+
+    newRow.appendChild(nameTd);
+    newRow.appendChild(valueTd);
+    newRow.appendChild(delButton);
+
+    delButton.firstChild.addEventListener('click', function del(e) {
+        deleteCookie(e.target.name);
+        update(getCookies());
+    })
+
+    return newRow;
 }
 
 filterNameInput.addEventListener('keyup', function() {
@@ -77,42 +125,15 @@ filterNameInput.addEventListener('keyup', function() {
 
 });
 
-function update(cookie) {
-    while (listTable.firstChild) {
-        listTable.removeChild(listTable.firstChild)
-    }
-
-    if (cookie.length == 1 && cookie[0] == '') {
-
-        return;
-    } else {
-        cookie.forEach(function(el) {
-            let newRow = document.createElement('TR');
-            let cookie = el.split('=');
-            let name = document.createElement('TD');
-            let value = document.createElement('TD');
-            let delButton = document.createElement('TD');
-
-            name.innerText = cookie[0];
-            value.innerText = cookie[1];
-            delButton.innerHTML = '<button id="del" name="' + cookie[0] + '">Удалить</button>';
-            listTable.appendChild(newRow);
-            newRow.appendChild(name);
-            newRow.appendChild(value);
-            newRow.appendChild(delButton);
-
-            delButton.addEventListener('click', function del(e) {
-                deleteCookie(e.target.name);
-                update(document.cookie.split('; '));
-            })
-        })
-    }
-}
-
 addButton.addEventListener('click', () => {
+    let cookies = getCookies();
 
-    createCookieTr(addNameInput.value, addValueInput.value);
-
-    update(document.cookie.split('; '));
+    if (!(cookies.hasOwnProperty(addNameInput.value))) {
+        createCookie(addNameInput.value, addValueInput.value);
+        listTable.appendChild(createCookieTr(addNameInput.value, addValueInput.value));
+    } else {
+        createCookie(addNameInput.value, addValueInput.value);
+        update(getCookies());
+    }
 
 });
