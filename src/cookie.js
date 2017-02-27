@@ -109,7 +109,8 @@ function createCookieTr(name, value) {
     let valueTd = document.createElement('TD');
     let delButton = document.createElement('TD');
 
-    delButton.innerHTML = '<button name="' + name + '">Удалить</button>';
+    delButton.innerHTML = '<button>Удалить</button>';
+    delButton.setAttribute('name', value);
     nameTd.innerText = name;
     valueTd.innerText = value;
 
