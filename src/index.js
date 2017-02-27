@@ -31,9 +31,10 @@ function loadAndSortTowns() {
         var request = new XMLHttpRequest();
 
         request.open('GET', url);
-        request.send()
+        request.send();
+        request.responseType='json';
         request.onload = function() {
-            var cities = JSON.parse(request.response);
+            var cities = request.response;
 
             cities.sort(function(a, b) {
                 if (a.name < b.name) {

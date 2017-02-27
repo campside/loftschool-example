@@ -70,18 +70,14 @@ let filterResult = homeworkContainer.querySelector('#filter-result');
 filterInput.addEventListener('keyup', function() {
     let value = this.value.trim();
 
-    if (filterResult.children.length != 0) {
-        while (filterResult.firstChild) {
-            filterResult.removeChild(filterResult.firstChild);
-        }
-    }
+    filterResult.innerHTML = '';
 
     loadTowns().then((towns) => {
         towns.forEach(function(e) {
             if (isMatching(e.name, value)) {
-                var placeForCity = document.createElement('span');
+                var placeForCity = document.createElement('div');
 
-                placeForCity.innerText = e.name + '\n';
+                placeForCity.innerText = e.name;
 
                 filterResult.appendChild(placeForCity);
 
