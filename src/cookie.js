@@ -87,9 +87,7 @@ function getCookies() {
  */
 function update(cookies) {
 
-    while (listTable.firstChild) {
-        listTable.removeChild(listTable.firstChild);
-    }
+    listTable.innerHTML = '';
 
     for (var prop in cookies) {
         if (isMatching(cookies[prop], filterNameInput.value) || isMatching(prop, filterNameInput.value)) {
