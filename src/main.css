@@ -1,0 +1,63 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+p {
+    margin: 0px;
+    padding: 0px;
+}
+
+.map {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+#feedback {
+  position: absolute;
+  width: 250px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  padding-bottom: 10px;
+  z-index: 2
+}
+
+#posts {
+  height: 170px;
+  overflow-y: scroll;
+}
+
+input {
+  width: 150px;
+}
+
+textarea.fbk {
+  width: 230px;
+  height: 50px;
+}
+
+div.header {
+  color: white;
+  margin-top: -16px;
+  height: 35px;
+  background-color: rgb(255, 154, 119);
+  font-size: 15px;
+  border-radius: 12px 12px 0 0;
+}
+
+div.header > p {
+  display: inline;
+  margin-right: 5px;
+}
+
+div.header > #close_feedback {
+  float: right;
+  height: 35px;
+  width: 35px;
+  background-color: red;
+  z-index: 1;
+}

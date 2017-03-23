@@ -1,4 +1,4 @@
-## LoftSchool example project
+run start## LoftSchool example project
 
 ### Доступные команды
 
