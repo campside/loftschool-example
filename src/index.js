@@ -30,8 +30,8 @@ function init(ymaps) {
 
     var customItemContentLayout = ymaps.templateLayoutFactory.createClass(
     // Флаг "raw" означает, что данные вставляют "как есть" без экранирования html.
-    '<a id="others">{{ properties.ballonContentHeader|raw }}</a>' +
-    '<div class=ballon_body>{{ properties.ballonContent|raw }}</div>');
+    '<div class=ballon_body>{{ properties.ballonContent|raw }}</div>' +
+    '<a id="others">{{ properties.ballonContentHeader|raw }}</a>');
 
     var clusterer = new ymaps.Clusterer({
         clusterDisableClickZoom: true,
